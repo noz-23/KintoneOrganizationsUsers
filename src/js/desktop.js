@@ -7,6 +7,7 @@
  * History
  *  2024/03/01 0.1.0 初版とりあえずバージョン
  *  2024/03/05 0.2.0 アルゴリズムの見直し
+ *  2024/03/05 0.2.1 ユーザー側を編集なしにした場合クリアする方法がなかったため、組織(グループ)なしにした場合はクリアする様に変更
  */
 
 ( (PLUGIN_ID_)=>{
@@ -39,31 +40,35 @@
   ];
   kintone.events.on(EVENTS_EDIT, (events_) => {
     console.log('events_:%o',events_);
-    // 入力できない様に変更
 
     console.log('editUsers:%o',editUsers);
    
+    // 入力できない様に変更
     if(editUsers !='true')
     {
-      events_.record[writeUsers].disabled =true;
-  
+      events_.record[writeUsers].disabled =true;  
     }
     return events_;
   });
 
   // 組織選択 フィールドの更新イベント
-  kintone.events.on(EVENTS_CHANGE_ORGANS, async(events_) => {
+  kintone.events.on(EVENTS_CHANGE_ORGANS, (events_) => {
     console.log('Organs events_:%o',events_);
 
     setUsers(events_, readOrgans,'/v1/organization/users.json');
   });
   // グループ選択 フィールドの更新イベント
-  kintone.events.on(EVENTS_CHANGE_GROUPS, async(events_) => {
+  kintone.events.on(EVENTS_CHANGE_GROUPS, (events_) => {
     console.log('Group events_:%o',events_);
 
     setUsers(events_, readGroups,'/v1/group/users.json');
   });
 
+  /* 
+  ユーザー選択へのデータ入れ
+   引数　：events_ イベントデータ, readFeild_ 読み取りフィールド名, apiFieldUsers_ 実行するAPI
+   戻り値：なし
+  */
   const setUsers=async ( events_, readFeild_, apiFieldUsers_)=>{
     console.log('setUsers:%o %o',readFeild_, apiFieldUsers_);
 
@@ -94,16 +99,34 @@
           listSetUser.push({code:user.code,name:user.name});
         }
       }
-
     }
 
+    await Sleep(500);
     var record =await kintone.app.record.get();
+
+    // ユーザー選択が編集不可で、選択されてない場合はクリア
+    if(editUsers !='true')
+    {
+      if(events_.record[readFeild_].value.length ==0)
+      {
+        listSetUser =[];
+      }
+    }
+
     // 重複チェックは更新時にされる          
     record.record[writeUsers].value =listSetUser;
 
     console.log('record:%o',record);
     kintone.app.record.set(record);
-
-
   };
+
+  /*
+  スリープ関数
+   引数　：ms_ ms単位のスリープ時間
+   戻り値：なし
+  */
+  const Sleep=(ms_)=>{
+    return new Promise(resolve_ => setTimeout(resolve_, ms_));
+  };
+
 })(kintone.$PLUGIN_ID);
