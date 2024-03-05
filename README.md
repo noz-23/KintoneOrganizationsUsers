@@ -33,6 +33,7 @@ jsrender :https://www.jsviews.com
 
  2024/03/01 0.1.0 初版 KintoneUsersOrganizationsの逆として作成
 
+ 2024/03/05 0.2.0 アルゴリズムを大幅に変更、不具合修正
 
 ## 7.連絡
 
