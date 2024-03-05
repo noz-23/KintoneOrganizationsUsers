@@ -1,3 +1,15 @@
+/*
+ *所属組織のユーザー展開
+ * Copyright (c) 2024 noz-23
+ *  https://github.com/noz-23/
+ *
+ * Licensed under the MIT License
+ * History
+ *  2024/03/01 0.1.0 初版とりあえずバージョン
+ *  2024/03/05 0.2.0 アルゴリズムの見直し
+ */
+
+
 jQuery.noConflict();
 
 (async (jQuery_,PLUGIN_ID_)=>{
@@ -19,7 +31,7 @@ jQuery.noConflict();
         plugin_label       : 'Please Setting Users select',
         users_label        : 'Deployment Users Field     ',
         edit_label         : 'Users Select Field Edit',
-        edit_value         : 'Allow',
+        edit_users         : 'Allow',
         organizations_label: 'Organizations Select Field ',
         groups_label       : 'Groups Select Field        ',
         plugin_cancel      : 'Cancel',
@@ -31,13 +43,13 @@ jQuery.noConflict();
         plugin_label       : 'ユーザー選択は設定して下さい',
         users_label        : 'ユーザー フィールド　　'　,
         edit_label         : 'ユーザー フィールドの編集',
-        edit_value         : '許可',
+        edit_users         : '許可',
         organizations_label: '組織選択 フィールド　　　',
         groups_label       : 'グループ選択 フィールド　',
         plugin_cancel      : 'キャンセル',
         plugin_ok          : '   保存  ',
       },
-      Setting:'ja',
+      DefaultSetting:'ja',
       UseLang:{}
     },
     Html:{
@@ -54,7 +66,7 @@ jQuery.noConflict();
     },
     Elements:{
       UsersField         :'#users_field',
-      EditField          :'#edit_field',
+      EditUsers          :'#edit_users',
       OrganizationsField :'#organizations_field',
       GroupsField        :'#groups_field',
     },
@@ -78,13 +90,13 @@ jQuery.noConflict();
   const settingLang=()=>{
     // 言語設定の取得
     Parameter.Lang.UseLang = kintone.getLoginUser().language;
-    switch( useLang)
+    switch( Parameter.Lang.UseLang)
     {
       case 'en':
       case 'ja':
         break;
       default:
-        Parameter.Lang.UseLang =Parameter.Lang.Setting;
+        Parameter.Lang.UseLang =Parameter.Lang.DefaultSetting;
         break;
     }
     // 言語表示の変更
@@ -132,7 +144,7 @@ jQuery.noConflict();
           option.attr('value', escapeHtml(prop.code)).text(escapeHtml(prop.label));
 
           console.log("Add GROUP_SELECT option:%o",option);          
-          jQuery(Parameter.Elements.GroupField).append(option);
+          jQuery(Parameter.Elements.GroupsField).append(option);
         }
                  
       }
@@ -149,13 +161,13 @@ jQuery.noConflict();
         jQuery(Parameter.Elements.UsersField).val(nowConfig[ParameterFieldUsers]); 
       }
       if(nowConfig[ParameterEditUsers]){
-        jQuery(Parameter.Elements.EditField).val(nowConfig[ParameterEditUsers]); 
+        jQuery(Parameter.Elements.EditUsers).prop('checked', nowConfig[ParameterEditUsers] =='true'); 
       }
       if(nowConfig[ParameterFieldOrganizations]){
         jQuery(Parameter.Elements.OrganizationsField).val(nowConfig[ParameterFieldOrganizations]); 
       }
       if(nowConfig[ParameterFieldGroups]){
-        jQuery(Parameter.Elements.PrimaryField).val(nowConfig[ParameterFieldPrimary]); 
+        jQuery(Parameter.Elements.GroupsField).val(nowConfig[ParameterFieldGroups]); 
       }
     }
   };
@@ -169,7 +181,7 @@ jQuery.noConflict();
     // 各パラメータの保存
     var config ={};
     config[ParameterFieldUsers]=jQuery(Parameter.Elements.UsersField).val();
-    config[ParameterEditUsers]=jQuery(Parameter.Elements.EditField).val();
+    config[ParameterEditUsers]=''+jQuery(Parameter.Elements.EditUsers).prop('checked');
     config[ParameterFieldOrganizations]=jQuery(Parameter.Elements.OrganizationsField).val();
     config[ParameterFieldGroups]=jQuery(Parameter.Elements.GroupsField).val();
 
@@ -179,12 +191,13 @@ jQuery.noConflict();
     kintone.plugin.app.setConfig(config);
   };
 
+  // 言語設定
+  settingLang();
+  await settingHtml();
+
   // 保存
   jQuery(Parameter.Html.Ok).click(() =>{saveSetting();});
   // キャンセル
   jQuery(Parameter.Html.Cancel).click(()=>{history.back();});
 
-  // 言語設定
-  settingLang();
-  await settingHtml();
 })(jQuery, kintone.$PLUGIN_ID);

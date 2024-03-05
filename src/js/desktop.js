@@ -4,6 +4,9 @@
  *  https://github.com/noz-23/
  *
  * Licensed under the MIT License
+ * History
+ *  2024/03/01 0.1.0 初版とりあえずバージョン
+ *  2024/03/05 0.2.0 アルゴリズムの見直し
  */
 
 ( (PLUGIN_ID_)=>{
@@ -40,98 +43,67 @@
 
     console.log('editUsers:%o',editUsers);
    
-    events_.record[writeUser].disabled =true;
+    if(editUsers !='true')
+    {
+      events_.record[writeUsers].disabled =true;
+  
+    }
     return events_;
   });
 
   // 組織選択 フィールドの更新イベント
   kintone.events.on(EVENTS_CHANGE_ORGANS, async(events_) => {
-    console.log('events_:%o',events_);
+    console.log('Organs events_:%o',events_);
 
-    let listSetUser=[...events_.record[writeUsers].value];
-    // 組織情報の取得
-    for( let i ;i<events_.record[readOrgans].value.length;i++){
-      let organ = events_.record[readOrgans].value[i];
-      // 組織に所属する人の取得
-      var paramOrgan={code:organ.code};
-      console.log('paramOrgan:%o',paramOrgan);
-      
-      if( i==events_.record[readOrgans].value.length -1){
-        // 最後だけは await にしないで更新
-        kintone.api(kintone.api.url('/v1/organization/users.json', true), 'GET',paramOrgan,async (listGetUser_)=>{
-          console.log('listGetUser:%o',listGetUser);
-
-          var record =await kintone.app.record.get();
-          console.log('record:%o',record);
-              // リストに追加
-          for(let user of listGetUser){
-            listSetUser.push({code:user.code,name:user.name});
-          }
-
-          // 重複チェックは更新時にされる          
-          record.record[writeUsers].value =listSetUser;
-      
-          //データの更新
-          kintone.app.record.set(record);
-        });
-      }
-      else{
-        // 組織ユーザの取得
-        var listGetUser =await kintone.api(kintone.api.url('/v1/organization/users.json', true), 'GET',paramOrgan);
-        console.log('listGetUser:%o',listGetUser);
-
-        // リストに追加
-        for(let user of listGetUser){
-          listSetUser.push({code:user.code,name:user.name});
-        }
-      }
-    }
-    return events_;
+    setUsers(events_, readOrgans,'/v1/organization/users.json');
   });
-
   // グループ選択 フィールドの更新イベント
-  kintone.events.on(EVENTS_CHANGE_ORGANS, async(events_) => {
-    console.log('events_:%o',events_);
+  kintone.events.on(EVENTS_CHANGE_GROUPS, async(events_) => {
+    console.log('Group events_:%o',events_);
+
+    setUsers(events_, readGroups,'/v1/group/users.json');
+  });
+
+  const setUsers=async ( events_, readFeild_, apiFieldUsers_)=>{
+    console.log('setUsers:%o %o',readFeild_, apiFieldUsers_);
 
     let listSetUser=[...events_.record[writeUsers].value];
-    // グループ情報の取得
-    for( let i ;i<events_.record[readGroups].value.length;i++){
-      let group = events_.record[readGroups].value[i];
-      // グループに所属する人の取得
-      var paramGroup={code:group.code};
-      console.log('paramGroup:%o',paramGroup);
-      
-      if( i==events_.record[readGroups].value.length -1){
-        // 最後だけは await にしないで更新
-        kintone.api(kintone.api.url('/v1/group/users.json', true), 'GET',paramGroup,async (listGetUser_)=>{
-          console.log('listGetUser:%o',listGetUser);
+    console.log('listSetUser:%o',listSetUser);
 
-          var record =await kintone.app.record.get();
-          console.log('record:%o',record);
-              // リストに追加
-          for(let user of listGetUser){
-            listSetUser.push({code:user.code,name:user.name});
-          }
+    // 組織(グループ)情報の取得
+    for( let field of events_.record[readFeild_].value){
+      // 組織(グループ)に所属する人の取得
+      var paramField={code:field.code};
+      console.log('paramField:%o',paramField);
 
-          // 重複チェックは更新時にされる          
-          record.record[writeUsers].value =listSetUser;
+      var listGetUser =await kintone.api(kintone.api.url(apiFieldUsers_, true), 'GET',paramField);
       
-          //データの更新
-          kintone.app.record.set(record);
-        });
+      // 組織(グループ)ユーザの取得
+      console.log('listGetUser:%o',listGetUser);
+
+      //
+      if( listGetUser['userTitles']){
+        // 組織
+        for(let user of listGetUser.userTitles){
+          listSetUser.push({code:user.user.code,name:user.user.name});
+        }
       }
       else{
-        // グループ ユーザの取得
-        var listGetUser =await kintone.api(kintone.api.url('/v1/group/users.json', true), 'GET',paramGroup);
-        console.log('listGetUser:%o',listGetUser);
-
-        // リストに追加
-        for(let user of listGetUser){
+        // グループ
+        for(let user of listGetUser.users){
           listSetUser.push({code:user.code,name:user.name});
         }
       }
-    }
-    return events_;
-  });
 
+    }
+
+    var record =await kintone.app.record.get();
+    // 重複チェックは更新時にされる          
+    record.record[writeUsers].value =listSetUser;
+
+    console.log('record:%o',record);
+    kintone.app.record.set(record);
+
+
+  };
 })(kintone.$PLUGIN_ID);
