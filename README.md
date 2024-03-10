@@ -8,6 +8,11 @@
 
 展開したユーザーの編集は任意に設定できます。
 
+### イメージ
+
+　![KintoneOrganizationsUsers](https://github.com/noz-23/KintoneOrganizationsUsers/assets/160399039/b48db6a3-53c9-47f6-8d2f-f530addf595d)
+
+
 ## 2.注意点
 
 一つの組織のユーザー上限は100人までとなります。
