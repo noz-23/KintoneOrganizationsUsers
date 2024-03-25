@@ -4,13 +4,28 @@
  *  https://github.com/noz-23/
  *
  * Licensed under the MIT License
+ * 
+ *  利用：
+ *   JQuery:
+ *     https://jquery.com/
+ *     https://js.cybozu.com/jquery/3.7.1/jquery.min.js
+ *   
+ *   jsrender:
+ *     https://www.jsviews.com/
+ *     https://js.cybozu.com/jsrender/1.0.13/jsrender.min.js
+ * 
  * History
  *  2024/03/01 0.1.0 初版とりあえずバージョン
  *  2024/03/05 0.2.0 アルゴリズムの見直し
  *  2024/03/05 0.2.1 ユーザー側を編集なしにした場合クリアする方法がなかったため、組織(グループ)なしにした場合はクリアする様に変更
+ *  2024/03/24 0.3.0 プラグイン設定画面に Google AdSense 追加
+ *
  */
 
-( (PLUGIN_ID_)=>{
+jQuery.noConflict();
+
+(async ( PLUGIN_ID_) => {
+  'use strict';
   // Kintone プラグイン 設定パラメータ
   const config = kintone.plugin.app.getConfig(PLUGIN_ID_);
 
