@@ -1,54 +1,60 @@
 <section id="plugin_setting_form" class="settings">
   <h2 id="plugin_titile" class="settings-heading">{{html:lang.plugin_titile}}</h2>
-  <p id="plugin_description" class="kintoneplugin-desc">{{html:lang.plugin_description}}</p>
+  <p id="plugin_description" class="kintoneplugin-title">{{html:lang.plugin_description}}</p>
   <form class="js-submit-settings">
-    <p class="kintoneplugin-row">
-      <label id="plugin_label" class="kintoneplugin-label">{{html:lang.plugin_label}}</label>
-      <br>
-    </p>
-    <label id="users_label" class="kintoneplugin-label">{{html:lang.users_label}}</label>
-    <div class="kintoneplugin-select">
-      <select id="users_field">
-        <option value="">---</option>
-      </select>
+    <div display="block" style="background-color: coral;">
+      <p class="kintoneplugin-label">
+        <label id="label_plugin" class="kintoneplugin-label">{{html:lang.label_from}}</label>
+      </p>
+      <div display="flex;">
+        <label class="kintoneplugin-desc">{{html:lang.label_organizations}}</label>
+        <div class="kintoneplugin-select">
+          <select id="organizations_field">
+            <option value="">---</option>
+          </select>
+        </div>
+        <label class="kintoneplugin-desc">{{html:lang.label_groups}}</label>
+        <div class="kintoneplugin-select">
+          <select id="groups_field">
+            <option value="">---</option>
+          </select>
+        </div>
+      </div>
     </div>
-    <br>
-    <label id="edit_label" class="kintoneplugin-label">{{html:lang.edit_label}}</label>
-    <div class="kintoneplugin-input-outer">
-      <input id="edit_users" class="kintoneplugin-input-text" type="checkbox" name="edit" checked>
-      <label for="edit">{{html:lang.edit_users}}</label>
+    <div display="flex" style="background-color: aquamarine;">
+      <p class="kintoneplugin-label">
+        <label id="label_plugin" class="kintoneplugin-label">{{html:lang.label_to}}</label>
+      </p>
+      <p class="kintoneplugin-label">
+        <label id="label_plugin" class="kintoneplugin-label">{{html:lang.label_plugin}}</label>
+      </p>
+      <label class="kintoneplugin-require">{{html:lang.label_users}}</label>
+      <div class="kintoneplugin-select">
+        <select id="users_field">
+          <option value="">---</option>
+        </select>
+      </div>
+      <label class="kintoneplugin-desc">{{html:lang.label_edit}}</label>
+      <div class="kintoneplugin-input-outer">
+        <input id="edit_users" class="kintoneplugin-input-text" type="checkbox" name="edit" checked>
+        <label for="edit">{{html:lang.edit_users}}</label>
+      </div>
     </div>
-    <br>
-    <label id="organizations_label" class="kintoneplugin-label">{{html:lang.organizations_label}}</label>
-    <div class="kintoneplugin-select">
-      <select id="organizations_field">
-        <option value="">---</option>
-      </select>
-    </div>
-    <br>
-    <label id="groups_label" class="kintoneplugin-label">{{html:lang.groups_label}}</label>
-    <div class="kintoneplugin-select">
-      <select id="groups_field">
-        <option value="">---</option>
-      </select>
-    </div>
-    <p class="kintoneplugin-row">
+    <div>
+      <p class="kintoneplugin-row">
         <button type="button" id="plugin_cancel" class="kintoneplugin-button-dialog-cancel">{{html:lang.plugin_cancel}}</button>
         <button type="button" id="plugin_ok" class="kintoneplugin-button-dialog-ok">{{html:lang.plugin_ok}}</button>
-    </p>
+      </p>
+    </div>
   </form>
-<!-- ↓ は広告なので 削除したい人は削除して使って下さい -->
+  <!-- ↓ は広告なので 削除したい人は削除して使って下さい -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8848137110933190"
-      crossorigin="anonymous"></script>
+    crossorigin="anonymous"></script>
   <!-- KintoneDisplay -->
-  <ins class="adsbygoogle"
-      style="display:block"
-      data-ad-client="ca-pub-8848137110933190"
-      data-ad-slot="3643192887"
-      data-ad-format="auto"
-      data-full-width-responsive="true"></ins>
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8848137110933190" data-ad-slot="3643192887"
+    data-ad-format="auto" data-full-width-responsive="true"></ins>
   <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
+    (adsbygoogle = window.adsbygoogle || []).push({});
   </script>
-<!-- ↑ は広告なので 削除したい人は削除して使って下さい -->
+  <!-- ↑ は広告なので 削除したい人は削除して使って下さい -->
 </section>

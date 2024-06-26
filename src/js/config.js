@@ -19,7 +19,7 @@
  *  2024/03/05 0.2.0 アルゴリズムの見直し
  *  2024/03/05 0.2.1 ユーザー側を編集なしにした場合クリアする方法がなかったため、組織(グループ)なしにした場合はクリアする様に変更
  *  2024/03/24 0.3.0 プラグイン設定画面に Google AdSense 追加
- *
+ *  2024/06/25 0.3.1 設定画面の説明変更(変数の変更等整理)
  */
 
 jQuery.noConflict();
@@ -40,24 +40,28 @@ jQuery.noConflict();
       en:{
         plugin_titile      : 'Deployment of Organization\'s Users Plugin',
         plugin_description : 'Set all affiliations and preferred organizations to which the user belongs',
-        plugin_label       : 'Please Setting Users select',
-        users_label        : 'Deployment Users Field     ',
-        edit_label         : 'Users Select Field Edit',
+        label_plugin       : 'Please Setting Users Field',
+        label_users        : 'Deployment Users Field     ',
+        label_edit         : 'Allow Edit',
+        label_organizations: 'Organizations Select Field ',
+        label_groups       : 'Groups Select Field        ',
+        label_from         : 'Deployment Source',
+        label_to           : 'Deployment Users',
         edit_users         : 'Allow',
-        organizations_label: 'Organizations Select Field ',
-        groups_label       : 'Groups Select Field        ',
         plugin_cancel      : 'Cancel',
         plugin_ok          : ' Save ',
       },
       ja:{
         plugin_titile      : '組織のユーザー展開 プラグイン',
         plugin_description : '組織(グループ)に所属するユーザーを設定します',
-        plugin_label       : 'ユーザー選択は設定して下さい',
-        users_label        : 'ユーザー フィールド　　'　,
-        edit_label         : 'ユーザー フィールドの編集',
+        label_plugin       : 'ユーザー フィールドは設定して下さい',
+        label_users        : 'ユーザー フィールド　　'　,
+        label_edit         : '編集許可',
+        label_organizations: '組織選択 フィールド　　　',
+        label_groups       : 'グループ選択 フィールド　',
+        label_from         : '展開元',
+        label_to           : '展開先',
         edit_users         : '許可',
-        organizations_label: '組織選択 フィールド　　　',
-        groups_label       : 'グループ選択 フィールド　',
         plugin_cancel      : 'キャンセル',
         plugin_ok          : '   保存  ',
       },
@@ -68,11 +72,6 @@ jQuery.noConflict();
       Form               : '#plugin_setting_form',
       Title              : '#plugin_titile',
       Description        : '#plugin_description',
-      Label              : '#plugin_label',
-      UsersLabel         : '#users_label',
-      CountLabel         : '#edit_label',
-      OrganizationsLabel : '#organizations_label',
-      GroupsLabel        : '#groups_label',
       Cancel             : '#plugin_cancel',
       Ok                 : '#plugin_ok',
     },
@@ -126,13 +125,13 @@ jQuery.noConflict();
    戻り値：なし
   */
   const settingHtml= async ()=>{
-    var listFeild =await kintone.api(kintone.api.url('/k/v1/app/form/fields', true), 'GET', {'app': kintone.app.getId()});
-    console.log("listFeild:%o",listFeild);
+    var listField =await kintone.api(kintone.api.url('/k/v1/app/form/fields', true), 'GET', {'app': kintone.app.getId()});
+    console.log("listField:%o",listField);
 
-    for (const key in listFeild.properties){
+    for (const key in listField.properties){
       //console.log("properties key:%o",key);
       try {
-        const prop = listFeild.properties[key];
+        const prop = listField.properties[key];
         //console.log("prop:%o",prop);
     
         // ユーザー選択フィールドのみ入れる
