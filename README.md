@@ -12,7 +12,8 @@
 
 設定画面
 
-　![KintoneOrganizationsUsers_setting](https://github.com/noz-23/KintoneUsersOrganizations/assets/160399039/218b70c9-80ec-41cf-82fe-ca3775371145)
+　![KintoneOrganizationsUsers_setting](https://github.com/noz-23/KintoneOrganizationsUsers/assets/160399039/52d307d9-1811-4830-b2cd-381f8493492d)
+
 
 
 アプリ画面
